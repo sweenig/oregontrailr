@@ -23,7 +23,13 @@
       transform: rotate(-90deg);
     }
     #myNavbar div a i {display:block;}
-    .savebutton {z-index:999;}
+    .savebutton, i.w3-tooltip>span {z-index:999;}
+    i.w3-tooltip > span {
+      position:absolute;
+      left:16px;
+      top:16px;
+      width:500px;
+    }
   </style>
   <script>
     mappings = {
@@ -90,9 +96,8 @@
       builturlctl = document.getElementById('builturl');
       builturlctl.innerHTML = builturl;
       builturlctl.href = builturl;
-      console.log(builturl);
       email_link_suffix = 
-      "?subject=" + encodeURIComponent("Question about my build")
+      "?subject=" + encodeURIComponent("Question about my ") + mappings[basepriceval].name + " build"
       + "&body="
       + encodeURIComponent("Here is the link to the options I've selected: ")
       + encodeURIComponent(builturl)
@@ -106,6 +111,8 @@
         document.getElementById("feature").src = mappings[basepriceval].img;
       }
       document.getElementById("total").innerHTML = "$" + sum.formatMoney(0);
+      savebuttons = document.getElementsByClassName("model");
+      for(var i=0; i<savebuttons.length;i++){savebuttons[i].innerHTML = mappings[basepriceval].name + ": $" + sum.formatMoney(0);}
     }
     function getURLParams(){
       var parenturl=parent.document.location.search; //get the parent page URL parameters
@@ -173,8 +180,8 @@
     <h2 class="w3-text-light-grey">Build<span class="w3-hide-small"> Your Trailer</span></h2>
     <hr style="width:200px" class="w3-opacity">
     <div class="w3-container" style="text-align:center;"><img id="feature" src="image1.jpg" class="w3-image" style="width:100%;height:auto;"></div>
-    <button class="savebutton w3-button w3-gray w3-padding" style="position:fixed;bottom:0;right:0;" onclick="document.getElementById('saveurl').style.display='block';"><i class="fa fa-sign-out w3-margin-right" aria-hidden="true"></i> Save this build</button>
-    <button class="savebutton w3-button w3-gray w3-padding" onclick="document.getElementById('saveurl').style.display='block';"><i class="fa fa-sign-out w3-margin-right" aria-hidden="true"></i> Save this build</button>
+    <button class="savebutton w3-button w3-gray w3-padding" style="position:fixed;bottom:0;right:0;" onclick="document.getElementById('saveurl').style.display='block';"><i class="fa fa-sign-out w3-margin-right" aria-hidden="true"></i> Save this <span class="model">build<span></button>
+    <button class="savebutton w3-button w3-gray w3-padding" onclick="document.getElementById('saveurl').style.display='block';"><i class="fa fa-sign-out w3-margin-right" aria-hidden="true"></i> Save this <span class="model">build<span></button>
     <table class="w3-table-all w3-text-black w3-hoverable">
       <tr><th>Option</th><th>Selected</th><th>Price</th></tr>
       <tr><td colspan="2"><select onchange="update();" class="w3-select" id="baseprice">
@@ -188,67 +195,83 @@
       </select></td><td style="text-align:right;" id="baseecho"></td></tr>
       <tr><td colspan="3"><h3>Chassis</h3></td></tr>
       <tr>
-        <td><label>15" Alloy Wheels <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">These add to the aesthetics and the ride quality of teardrop</span></i></label></td>
+        <td>
+          <label>
+            15" Alloy Wheels 
+            <i class="fa fa-info-circle w3-tooltip w3-text-gray w3-text-left">
+              <span class="w3-text w3-tag w3-round w3-small w3-padding w3-cell-row" style="">
+                <div class="w3-cell">
+                  <p>Standard:</p>
+                  <img src="options/standard.cabinet.jpg" style="width:200px;height:auto;" />
+                </div>
+                <div class="w3-cell">
+                  <p>These add to the aesthetics and the ride quality of teardrop</p>
+                  <img src="options/custom.cabinet.jpg" style="width:200px;height:auto;" />
+                </div>
+              </span>
+            </i>
+          </label>
+        </td>
         <td style="text-align:center;"><input id="opt1" onchange="update()" class="w3-check" type="checkbox" price="149"></td>
         <td style="text-align:right;">$149</td>
       </tr>
       <tr>
-        <td><label>Heavy Duty Trailer Tires <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">These tires won"t get flat spots even after long periods of storage. Pair</span></i></label></td>
+        <td><label>Heavy Duty Trailer Tires <i class="fa fa-info-circle w3-tooltip w3-text-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding">These tires won"t get flat spots even after long periods of storage. Pair</span></i></label></td>
         <td style="text-align:center;"><input id="opt2" onchange="update()" class="w3-check" type="checkbox" price="75"></td>
         <td style="text-align:right;">$75</td>
       </tr>
       <tr>
-        <td><label>Adjustable/Removable Tongue <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">Allows multiple towing options and extra security when leaving the teardrop</span></i></label></td>
+        <td><label>Adjustable/Removable Tongue <i class="fa fa-info-circle w3-tooltip w3-text-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding">Allows multiple towing options and extra security when leaving the teardrop</span></i></label></td>
         <td style="text-align:center;"><input id="opt3" onchange="update()" class="w3-check" type="checkbox" price="129"></td>
         <td style="text-align:right;">$129</td>
       </tr>
       <tr>
-        <td><label>Rear Leveling Jacks <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">Heavy duty long extension scissor jacks get mounted under the chassis. Pair</span></i></label></td>
+        <td><label>Rear Leveling Jacks <i class="fa fa-info-circle w3-tooltip w3-text-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding">Heavy duty long extension scissor jacks get mounted under the chassis. Pair</span></i></label></td>
         <td style="text-align:center;"><input id="opt4" onchange="update()" class="w3-check" type="checkbox" price="289"></td>
         <td style="text-align:right;">$289</td>
       </tr>
       <tr>
-        <td><label>Accessory Hitch <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">For mounting a bike rack or other accessories (not to exceed 150 lb load)</span></i></label></td>
+        <td><label>Accessory Hitch <i class="fa fa-info-circle w3-tooltip w3-text-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding">For mounting a bike rack or other accessories (not to exceed 150 lb load)</span></i></label></td>
         <td style="text-align:center;"><input id="opt5" onchange="update()" class="w3-check" type="checkbox" price="199"></td>
         <td style="text-align:right;">$199</td>
       </tr>
       <tr>
-        <td><label>Off Road Suspension Package <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">Timbren Axless independent suspension with chassis reinforcement</span></i></label></td>
+        <td><label>Off Road Suspension Package <i class="fa fa-info-circle w3-tooltip w3-text-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding">Timbren Axless independent suspension with chassis reinforcement</span></i></label></td>
         <td style="text-align:center;"><input id="opt6" onchange="update()" class="w3-check" type="checkbox" price="999"></td>
         <td style="text-align:right;">$999</td>
       </tr>
       <tr>
-        <td><label>Multi Axis MAX Coupler <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">for hard core towing situations and all around improved towing characteristics</span></i></label></td>
+        <td><label>Multi Axis MAX Coupler <i class="fa fa-info-circle w3-tooltip w3-text-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding">for hard core towing situations and all around improved towing characteristics</span></i></label></td>
         <td style="text-align:center;"><input id="opt7" onchange="update()" class="w3-check" type="checkbox" price="299"></td>
         <td style="text-align:right;">$299</td>
       </tr>
       <tr>
-        <td><label>Off Road Tires <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">Larger/meatier tires for increased grip in difficult situations</span></i></label></td>
+        <td><label>Off Road Tires <i class="fa fa-info-circle w3-tooltip w3-text-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding">Larger/meatier tires for increased grip in difficult situations</span></i></label></td>
         <td style="text-align:center;"><input id="opt8" onchange="update()" class="w3-check" type="checkbox" price="229"></td>
         <td style="text-align:right;">$229</td>
       </tr>
       <tr>
-        <td><label>Fender <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">deflector/steps</span></i></label></td>
+        <td><label>Fender <i class="fa fa-info-circle w3-tooltip w3-text-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding">deflector/steps</span></i></label></td>
         <td style="text-align:center;"><input id="opt9" onchange="update()" class="w3-check" type="checkbox" price="399"></td>
         <td style="text-align:right;">$399</td>
       </tr>
       <tr>
-        <td><label>Tongue Rack <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">Provides exterior storage in front of the teardrop</span></i></label></td>
+        <td><label>Tongue Rack <i class="fa fa-info-circle w3-tooltip w3-text-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding">Provides exterior storage in front of the teardrop</span></i></label></td>
         <td style="text-align:center;"><input id="opt10" onchange="update()" class="w3-check" type="checkbox" price="299"></td>
         <td style="text-align:right;">$299</td>
       </tr>
       <tr>
-        <td><label>Spare tire <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">small doughnut style wheel and tire mounted below chassis</span></i></label></td>
+        <td><label>Spare tire <i class="fa fa-info-circle w3-tooltip w3-text-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding">small doughnut style wheel and tire mounted below chassis</span></i></label></td>
         <td style="text-align:center;"><input id="opt11" onchange="update()" class="w3-check" type="checkbox" price="149"></td>
         <td style="text-align:right;">$149</td>
       </tr>
       <tr>
-        <td><label>Back-up lights <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">High power LED flood light mounted under chassis</span></i></label></td>
+        <td><label>Back-up lights <i class="fa fa-info-circle w3-tooltip w3-text-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding">High power LED flood light mounted under chassis</span></i></label></td>
         <td style="text-align:center;"><input id="opt12" onchange="update()" class="w3-check" type="checkbox" price="129"></td>
         <td style="text-align:right;">$129</td>
       </tr>
       <tr>
-        <td><label>Electric Braking Option <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">description needed</span></i></label></td>
+        <td><label>Electric Braking Option <i class="fa fa-info-circle w3-tooltip w3-text-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding">description needed</span></i></label></td>
         <td style="text-align:center;"><input id="opt13" onchange="update()" class="w3-check" type="checkbox" price="479"></td>
         <td style="text-align:right;">$479</td>
       </tr>
@@ -257,7 +280,7 @@
         <td id="total" style="text-align:right;"></td>
       </tr>
     </table>
-    <button class="savebutton w3-button w3-gray w3-padding" onclick="document.getElementById('saveurl').style.display='block';"><i class="fa fa-sign-out w3-margin-right" aria-hidden="true"></i> Save this build</button>
+    <button class="savebutton w3-button w3-gray w3-padding" onclick="document.getElementById('saveurl').style.display='block';"><i class="fa fa-sign-out w3-margin-right" aria-hidden="true"></i> Save this <span class="model">build<span></button>
   </div>
   <div id="saveurl" class="w3-modal">
     <div class="w3-modal-content w3-animate-top w3-card-4">
