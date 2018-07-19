@@ -94,17 +94,17 @@
         }
       }
       builturlctl = document.getElementById('builturl');
-      builturlctl.innerHTML = builturl;
+      builturlctl.innerHTML = location.protocol + "//" + location.host + builturl;
       builturlctl.href = builturl;
       email_link_suffix = 
       "?subject=" + encodeURIComponent("Question about my ") + mappings[basepriceval].name + " build"
       + "&body="
       + encodeURIComponent("Here is the link to the options I've selected: ")
-      + encodeURIComponent(builturl)
+      + encodeURIComponent(location.protocol + "//" + location.host + builturl)
       + "%0D%0A%0D%0A"
       + encodeURIComponent("Could you help me?");
-      document.getElementById("mailjon").href += email_link_suffix;
-      document.getElementById("mailsaw").href += email_link_suffix;
+      document.getElementById("mailjon").href = "mailto:jon@oregontrailer.net" + email_link_suffix;
+      document.getElementById("mailsaw").href = "mailto:sawyer@oregontrailer.net" + email_link_suffix;
       if (basepriceval != '') {
         sum += Number(mappings[basepriceval].price);
         document.getElementById("baseecho").innerHTML = mappings[basepriceval].price_f;
