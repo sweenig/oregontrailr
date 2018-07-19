@@ -1,50 +1,136 @@
 <!DOCTYPE html>
 <html>
-<title>Oregon Trail'Rs</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
-.w3-row-padding img {margin-bottom: 12px}
-/* Set the width of the sidebar to 120px */
-.w3-sidebar {width: 120px;background: #222;}
-/* Add a left margin to the "page content" that matches the width of the sidebar (120px) */
-#main {margin-left: 120px}
-/* Remove margins from "page content" on small screens */
-@media only screen and (max-width: 600px) {#main {margin-left: 0}}
-.w3-check {top:0px;}
-</style>
-<script>
-  Number.prototype.formatMoney = function(c, d, t){
-      var n = this, 
-      c = isNaN(c = Math.abs(c)) ? 2 : c, 
-      d = d == undefined ? "." : d, 
-      t = t == undefined ? "," : t, 
-      s = n < 0 ? "-" : "", 
-      i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
-      j = (j = i.length) > 3 ? j % 3 : 0;
-     return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-   };
-  function update(){
-    var inputs = document.getElementsByTagName('input'),
-    sum = 0;
-    for(var i=0; i<inputs.length; i++) {
-      var ip = inputs[i];
-      if (ip.getAttribute("class") == "w3-check" && ip.checked) {
-        sum += Number(ip.getAttribute("price"));
+<head>
+  <title>Oregon Trail'Rs</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
+    .w3-row-padding img {margin-bottom: 12px}
+    /* Set the width of the sidebar to 120px */
+    .w3-sidebar {width: 120px;background: #222;}
+    /* Add a left margin to the "page content" that matches the width of the sidebar (120px) */
+    #main {margin-left: 120px}
+    /* Remove margins from "page content" on small screens */
+    @media only screen and (max-width: 600px) {#main {margin-left: 0}}
+    .w3-check {top:0px;}
+    .fa-sign-out {
+      -ms-transform: rotate(-90deg); /* IE 9 */
+      -webkit-transform: rotate(-90deg); /* Safari 3-8 */
+      transform: rotate(-90deg);
+    }
+    #myNavbar div a i {display:block;}
+    .savebutton {z-index:999;}
+  </style>
+  <script>
+    mappings = {
+      terradrop: {
+        name: "TerraDrop",
+        price: 11000,
+        price_f: "$11k",
+        img: "trailers/terradrop.jpg"
+      },
+      terradropalpha: {
+        name: "TerraDrop Alpha",
+        price: 12000,
+        price_f: "$12k",
+        img: "trailers/terradrop.alpha.jpg"
+      },
+      frontear: {
+        name: "FronTear",
+        price: 13000,
+        price_f: "$13k",
+        img: "trailers/frontear.jpg"
+      },
+      dodrop: {
+        name: "Do-Drop",
+        price: 14000,
+        price_f: "$14k",
+        img: "trailers/do-drop.jpg"
+      },
+      frontearoffroad: {
+        name: "FronTear Offroad",
+        price: 15000,
+        price_f: "$15k",
+        img: "trailers/frontear.offroad.jpg"
+      },
+      dodropalpha: {
+        name: "Do-Drop Alpha",
+        price: 16000,
+        price_f: "$16k",
+        img: "trailers/dodrop.alpha.jpg"
       }
     }
-    sum += Number(document.getElementById("baseprice").value);
-    baseprice = Number(document.getElementById("baseprice").value);
-    document.getElementById("baseecho").innerHTML = "$" + baseprice.formatMoney(0);
-    document.getElementById("total").innerHTML = "$" + sum.formatMoney(0);
-  }
-</script>
-<body class="w3-black">
-
+    Number.prototype.formatMoney = function(c, d, t){
+        var n = this, 
+        c = isNaN(c = Math.abs(c)) ? 2 : c, 
+        d = d == undefined ? "." : d, 
+        t = t == undefined ? "," : t, 
+        s = n < 0 ? "-" : "", 
+        i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+        j = (j = i.length) > 3 ? j % 3 : 0;
+       return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+     };
+    function update(){
+      var inputs = document.getElementsByTagName('input'),sum = 0,builturl = '';
+      builturl = location.pathname + '?';
+      basepriceval = document.getElementById('baseprice').value
+      builturl += 'basemodel=' + basepriceval;
+      for(var i=0; i<inputs.length; i++) {
+        var ip = inputs[i];
+        if (ip.getAttribute("class") == "w3-check" && ip.checked) {
+          sum += Number(ip.getAttribute("price"));
+          builturl += "&";
+          builturl += ip.getAttribute("id");
+        }
+      }
+      builturlctl = document.getElementById('builturl');
+      builturlctl.innerHTML = builturl;
+      builturlctl.href = builturl;
+      console.log(builturl);
+      email_link_suffix = 
+      "?subject=" + encodeURIComponent("Question about my build")
+      + "&body="
+      + encodeURIComponent("Here is the link to the options I've selected: ")
+      + encodeURIComponent(builturl)
+      + "%0D%0A%0D%0A"
+      + encodeURIComponent("Could you help me?");
+      document.getElementById("mailjon").href += email_link_suffix;
+      document.getElementById("mailsaw").href += email_link_suffix;
+      if (basepriceval != '') {
+        sum += Number(mappings[basepriceval].price);
+        document.getElementById("baseecho").innerHTML = mappings[basepriceval].price_f;
+        document.getElementById("feature").src = mappings[basepriceval].img;
+      }
+      document.getElementById("total").innerHTML = "$" + sum.formatMoney(0);
+    }
+    function getURLParams(){
+      var parenturl=parent.document.location.search; //get the parent page URL parameters
+      if (parenturl.length > 0) {
+        parenturl=parenturl.replace('?',''); //remove the leading ? from the URL parameters
+        var argsarray=parenturl.split('&'); //split the parameters into an array of parameter pairs
+        var argsmatrix = new Array(argsarray.length); //create the matrix to hold the parameters after splitting
+        for (var i = 0; i < argsarray.length; i++){ //split the array members and put into the matrix
+          argsmatrix[i] = new Array(2); //create a new sub-array
+          argsmatrix[i] = argsarray[i].split('='); //split each row of the array into two components, store into new array as sub-array
+        }
+        return argsmatrix;
+      } else {return new Array(0);}
+    }
+    function initialize(){
+      var argsmatrix = getURLParams();
+      for (var j = 0; j < argsmatrix.length; j++){
+        if (argsmatrix[j][0] == 'basemodel'){document.getElementById('baseprice').value = argsmatrix[j][1];}
+        else {document.getElementById(argsmatrix[j][0]).checked = true;}
+      }
+      update();
+    }
+  </script>
+</head>
+<body class="w3-black" onload="initialize();">
 <!-- Icon Bar (Sidebar - hidden on small screens) -->
 <nav class="w3-sidebar w3-bar-block w3-small w3-hide-small w3-center">
   <!-- Avatar image in top left corner -->
@@ -53,9 +139,9 @@ body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
     <i class="fa fa-home w3-xxlarge"></i>
     <p>HOME</p>
   </a>
-  <a href="#pricing" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
-    <i class="fa fa-usd w3-xxlarge"></i>
-    <p>PRICING</p>
+  <a href="#build" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+    <i class="fa fa-cogs w3-xxlarge"></i>
+    <p>BUILD</p>
   </a>
   <a href="#photos" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
     <i class="fa fa-picture-o w3-xxlarge"></i>
@@ -66,116 +152,126 @@ body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
     <p>CONTACT</p>
   </a>
 </nav>
-
 <!-- Navbar on small screens (Hidden on medium and large screens) -->
 <div class="w3-top w3-hide-large w3-hide-medium" id="myNavbar">
   <div class="w3-bar w3-black w3-opacity w3-hover-opacity-off w3-center w3-small">
-    <a href="#" class="w3-bar-item w3-button" style="width:25% !important">HOME</a>
-    <a href="#pricing" class="w3-bar-item w3-button" style="width:25% !important">PRICING</a>
-    <a href="#photos" class="w3-bar-item w3-button" style="width:25% !important">PHOTOS</a>
-    <a href="#contact" class="w3-bar-item w3-button" style="width:25% !important">CONTACT</a>
+    <a href="#" class="w3-bar-item w3-button" style="width:25% !important"><i class="fa fa-home"></i>HOME</a>
+    <a href="#build" class="w3-bar-item w3-button" style="width:25% !important"><i class="fa fa-cogs"></i> BUILD</a>
+    <a href="#photos" class="w3-bar-item w3-button" style="width:25% !important"><i class="fa fa-picture-o"></i> PHOTOS</a>
+    <a href="#contact" class="w3-bar-item w3-button" style="width:25% !important"><i class="fa fa-envelope"></i> CONTACT</a>
   </div>
 </div>
-
 <!-- Page Content -->
 <div class="w3-padding-large" id="main">
   <!-- Header/Home -->
   <header class="w3-container w3-padding-32 w3-center w3-black" id="home">
     <h1 class="w3-jumbo">Oregon Trail'R<span class="w3-hide-small"> Teardrop trailers</span></h1>
     <p>finest-quality, beautiful teardrop campers</p>
-    <img src="image1.jpg" alt="boy" class="w3-image" width="992" height="1108">
   </header>
-
-  <!-- Pricing Section -->
-  <div class="w3-padding-64 w3-content" id="pricing">
-  <table class="w3-table-all w3-text-black w3-hoverable">
-    <tr><th>Option</th><th>Selected</th><th>Price</th></tr>
-    <tr><td colspan="2"><select onchange="update();" class="w3-select" id="baseprice">
-      <option value="" disabled selected>Choose your option</option>
-      <option value="11000">TerraDrop - $11k</option>
-      <option value="12000">TerraDrop Alpha - $12k</option>
-      <option value="13000">FronTear - $13k</option>
-      <option value="14000">Do-Drop - $14k</option>
-      <option value="15000">Frontear - Offroad - $15k</option>
-      <option value="16000">Do-Drop Alpha - $16k</option>
-    </select></td><td style="text-align:right;" id="baseecho"></td></tr>
-    <tr><td colspan="3"><h3>Chassis</h3></td></tr>
-    <tr>
-      <td><label>15" Alloy Wheels <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">These add to the aesthetics and the ride quality of teardrop</span></i></label></td>
-      <td style="text-align:center;"><input onchange="update()" class="w3-check" type="checkbox" price="149"></td>
-      <td style="text-align:right;">$149</td>
-    </tr>
-    <tr>
-      <td><label>Heavy Duty Trailer Tires <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">These tires won"t get flat spots even after long periods of storage. Pair</span></i></label></td>
-      <td style="text-align:center;"><input onchange="update()" class="w3-check" type="checkbox" price="75"></td>
-      <td style="text-align:right;">$75</td>
-    </tr>
-    <tr>
-      <td><label>Adjustable/Removable Tongue <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">Allows multiple towing options and extra security when leaving the teardrop</span></i></label></td>
-      <td style="text-align:center;"><input onchange="update()" class="w3-check" type="checkbox" price="129"></td>
-      <td style="text-align:right;">$129</td>
-    </tr>
-    <tr>
-      <td><label>Rear Leveling Jacks <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">Heavy duty long extension scissor jacks get mounted under the chassis. Pair</span></i></label></td>
-      <td style="text-align:center;"><input onchange="update()" class="w3-check" type="checkbox" price="289"></td>
-      <td style="text-align:right;">$289</td>
-    </tr>
-    <tr>
-      <td><label>Accessory Hitch <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">For mounting a bike rack or other accessories (not to exceed 150 lb load)</span></i></label></td>
-      <td style="text-align:center;"><input onchange="update()" class="w3-check" type="checkbox" price="199"></td>
-      <td style="text-align:right;">$199</td>
-    </tr>
-    <tr>
-      <td><label>Off Road Suspension Package <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">Timbren Axless independent suspension with chassis reinforcement</span></i></label></td>
-      <td style="text-align:center;"><input onchange="update()" class="w3-check" type="checkbox" price="999"></td>
-      <td style="text-align:right;">$999</td>
-    </tr>
-    <tr>
-      <td><label>Multi Axis MAX Coupler <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">for hard core towing situations and all around improved towing characteristics</span></i></label></td>
-      <td style="text-align:center;"><input onchange="update()" class="w3-check" type="checkbox" price="299"></td>
-      <td style="text-align:right;">$299</td>
-    </tr>
-    <tr>
-      <td><label>Off Road Tires <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">Larger/meatier tires for increased grip in difficult situations</span></i></label></td>
-      <td style="text-align:center;"><input onchange="update()" class="w3-check" type="checkbox" price="229"></td>
-      <td style="text-align:right;">$229</td>
-    </tr>
-    <tr>
-      <td><label>Fender <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">deflector/steps</span></i></label></td>
-      <td style="text-align:center;"><input onchange="update()" class="w3-check" type="checkbox" price="399"></td>
-      <td style="text-align:right;">$399</td>
-    </tr>
-    <tr>
-      <td><label>Tongue Rack <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">Provides exterior storage in front of the teardrop</span></i></label></td>
-      <td style="text-align:center;"><input onchange="update()" class="w3-check" type="checkbox" price="299"></td>
-      <td style="text-align:right;">$299</td>
-    </tr>
-    <tr>
-      <td><label>Spare tire <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">small doughnut style wheel and tire mounted below chassis</span></i></label></td>
-      <td style="text-align:center;"><input onchange="update()" class="w3-check" type="checkbox" price="149"></td>
-      <td style="text-align:right;">$149</td>
-    </tr>
-    <tr>
-      <td><label>Back-up lights <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">High power LED flood light mounted under chassis</span></i></label></td>
-      <td style="text-align:center;"><input onchange="update()" class="w3-check" type="checkbox" price="129"></td>
-      <td style="text-align:right;">$129</td>
-    </tr>
-    <tr>
-      <td><label>Electric Braking Option <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">description needed</span></i></label></td>
-      <td style="text-align:center;"><input onchange="update()" class="w3-check" type="checkbox" price="479"></td>
-      <td style="text-align:right;">$479</td>
-    </tr>
-    <tr>
-      <td colspan="2" style="text-align:right;background-color:black;color:white;">Total: </td>
-      <td id="total" style="text-align:right;"></td>
-    </tr>
-</table>
-
-
+  <!-- build Section -->
+  <div class="w3-padding-32 w3-content" id="build">
+    <h2 class="w3-text-light-grey">Build<span class="w3-hide-small"> Your Trailer</span></h2>
+    <hr style="width:200px" class="w3-opacity">
+    <div class="w3-container" style="text-align:center;"><img id="feature" src="image1.jpg" class="w3-image" style="width:100%;height:auto;"></div>
+    <button class="savebutton w3-button w3-gray w3-padding" style="position:fixed;bottom:0;right:0;" onclick="document.getElementById('saveurl').style.display='block';"><i class="fa fa-sign-out w3-margin-right" aria-hidden="true"></i> Save this build</button>
+    <button class="savebutton w3-button w3-gray w3-padding" onclick="document.getElementById('saveurl').style.display='block';"><i class="fa fa-sign-out w3-margin-right" aria-hidden="true"></i> Save this build</button>
+    <table class="w3-table-all w3-text-black w3-hoverable">
+      <tr><th>Option</th><th>Selected</th><th>Price</th></tr>
+      <tr><td colspan="2"><select onchange="update();" class="w3-select" id="baseprice">
+        <option value="" disabled selected>Choose your option</option>
+        <option value="terradrop">TerraDrop - $11k</option>
+        <option value="terradropalpha">TerraDrop Alpha - $12k</option>
+        <option value="frontear">FronTear - $13k</option>
+        <option value="dodrop">Do-Drop - $14k</option>
+        <option value="frontearoffroad">Frontear - Offroad - $15k</option>
+        <option value="dodropalpha">Do-Drop Alpha - $16k</option>
+      </select></td><td style="text-align:right;" id="baseecho"></td></tr>
+      <tr><td colspan="3"><h3>Chassis</h3></td></tr>
+      <tr>
+        <td><label>15" Alloy Wheels <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">These add to the aesthetics and the ride quality of teardrop</span></i></label></td>
+        <td style="text-align:center;"><input id="opt1" onchange="update()" class="w3-check" type="checkbox" price="149"></td>
+        <td style="text-align:right;">$149</td>
+      </tr>
+      <tr>
+        <td><label>Heavy Duty Trailer Tires <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">These tires won"t get flat spots even after long periods of storage. Pair</span></i></label></td>
+        <td style="text-align:center;"><input id="opt2" onchange="update()" class="w3-check" type="checkbox" price="75"></td>
+        <td style="text-align:right;">$75</td>
+      </tr>
+      <tr>
+        <td><label>Adjustable/Removable Tongue <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">Allows multiple towing options and extra security when leaving the teardrop</span></i></label></td>
+        <td style="text-align:center;"><input id="opt3" onchange="update()" class="w3-check" type="checkbox" price="129"></td>
+        <td style="text-align:right;">$129</td>
+      </tr>
+      <tr>
+        <td><label>Rear Leveling Jacks <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">Heavy duty long extension scissor jacks get mounted under the chassis. Pair</span></i></label></td>
+        <td style="text-align:center;"><input id="opt4" onchange="update()" class="w3-check" type="checkbox" price="289"></td>
+        <td style="text-align:right;">$289</td>
+      </tr>
+      <tr>
+        <td><label>Accessory Hitch <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">For mounting a bike rack or other accessories (not to exceed 150 lb load)</span></i></label></td>
+        <td style="text-align:center;"><input id="opt5" onchange="update()" class="w3-check" type="checkbox" price="199"></td>
+        <td style="text-align:right;">$199</td>
+      </tr>
+      <tr>
+        <td><label>Off Road Suspension Package <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">Timbren Axless independent suspension with chassis reinforcement</span></i></label></td>
+        <td style="text-align:center;"><input id="opt6" onchange="update()" class="w3-check" type="checkbox" price="999"></td>
+        <td style="text-align:right;">$999</td>
+      </tr>
+      <tr>
+        <td><label>Multi Axis MAX Coupler <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">for hard core towing situations and all around improved towing characteristics</span></i></label></td>
+        <td style="text-align:center;"><input id="opt7" onchange="update()" class="w3-check" type="checkbox" price="299"></td>
+        <td style="text-align:right;">$299</td>
+      </tr>
+      <tr>
+        <td><label>Off Road Tires <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">Larger/meatier tires for increased grip in difficult situations</span></i></label></td>
+        <td style="text-align:center;"><input id="opt8" onchange="update()" class="w3-check" type="checkbox" price="229"></td>
+        <td style="text-align:right;">$229</td>
+      </tr>
+      <tr>
+        <td><label>Fender <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">deflector/steps</span></i></label></td>
+        <td style="text-align:center;"><input id="opt9" onchange="update()" class="w3-check" type="checkbox" price="399"></td>
+        <td style="text-align:right;">$399</td>
+      </tr>
+      <tr>
+        <td><label>Tongue Rack <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">Provides exterior storage in front of the teardrop</span></i></label></td>
+        <td style="text-align:center;"><input id="opt10" onchange="update()" class="w3-check" type="checkbox" price="299"></td>
+        <td style="text-align:right;">$299</td>
+      </tr>
+      <tr>
+        <td><label>Spare tire <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">small doughnut style wheel and tire mounted below chassis</span></i></label></td>
+        <td style="text-align:center;"><input id="opt11" onchange="update()" class="w3-check" type="checkbox" price="149"></td>
+        <td style="text-align:right;">$149</td>
+      </tr>
+      <tr>
+        <td><label>Back-up lights <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">High power LED flood light mounted under chassis</span></i></label></td>
+        <td style="text-align:center;"><input id="opt12" onchange="update()" class="w3-check" type="checkbox" price="129"></td>
+        <td style="text-align:right;">$129</td>
+      </tr>
+      <tr>
+        <td><label>Electric Braking Option <i class="fa fa-info-circle w3-tooltip w3-text-light-gray"><span class="w3-text w3-tag w3-round w3-small w3-padding" style="position:absolute;left:16px;top:16px;width:220px;">description needed</span></i></label></td>
+        <td style="text-align:center;"><input id="opt13" onchange="update()" class="w3-check" type="checkbox" price="479"></td>
+        <td style="text-align:right;">$479</td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align:right;background-color:black;color:white;">Total: </td>
+        <td id="total" style="text-align:right;"></td>
+      </tr>
+    </table>
+    <button class="savebutton w3-button w3-gray w3-padding" onclick="document.getElementById('saveurl').style.display='block';"><i class="fa fa-sign-out w3-margin-right" aria-hidden="true"></i> Save this build</button>
   </div>
-  <!-- End Pricing Section -->
+  <div id="saveurl" class="w3-modal">
+    <div class="w3-modal-content w3-animate-top w3-card-4">
+      <header class="w3-container w3-green w3-padding">
+        <span onclick="document.getElementById('saveurl').style.display='none'" class="w3-button w3-display-topright "><i class="fa fa-times" aria-hidden="true"></i></span>
+        Bookmark this URL to save your configuration
+      </header>
+      <div class="w3-container w3-text-black w3-padding w3-margin"><a id="builturl"></a></div>
+      <footer class="w3-container w3-green w3-padding">
+        Thank you for using OregonTrailRs
+      </footer>
+    </div>
   </div>
-  
+  <!-- End build Section -->
   <!-- Portfolio Section -->
   <div class="w3-padding-64 w3-content" id="photos">
     <h2 class="w3-text-light-grey">My Photos</h2>
@@ -199,7 +295,6 @@ body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
     </div>
   <!-- End Portfolio Section -->
   </div>
-
   <!-- Contact Section -->
   <div class="w3-padding-64 w3-content w3-text-grey" id="contact">
     <h2 class="w3-text-light-grey">Contact Us</h2>
@@ -208,8 +303,8 @@ body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
     <div class="w3-section">
       <p><i class="fa fa-map-marker fa-fw w3-text-white w3-xxlarge w3-margin-right"></i> Eugene, OR 97402</p>
       <p><i class="fa fa-phone fa-fw w3-text-white w3-xxlarge w3-margin-right"></i> Phone: (541)357-8895</p>
-      <p><a href="mailto:jon@oregontrailer.net"><i class="fa fa-envelope fa-fw w3-text-white w3-xxlarge w3-margin-right"></i> jon@oregontrailer.net</a></p>
-      <p><a href="mailto:sawyer@oregontrailer.net"><i class="fa fa-envelope fa-fw w3-text-white w3-xxlarge w3-margin-right"></i> sawyer@oregontrailer.net</a></p>
+      <p><a id="mailjon" href="mailto:jon@oregontrailer.net"><i class="fa fa-envelope fa-fw w3-text-white w3-xxlarge w3-margin-right"></i> jon@oregontrailer.net</a></p>
+      <p><a id="mailsaw" href="mailto:sawyer@oregontrailer.net"><i class="fa fa-envelope fa-fw w3-text-white w3-xxlarge w3-margin-right"></i> sawyer@oregontrailer.net</a></p>
       </div><br>
 <!--     <p>Lets get in touch. Send me a message:</p>
 
@@ -226,8 +321,7 @@ body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
     </form> -->
   <!-- End Contact Section -->
   </div>
-  
-    <!-- Footer -->
+  <!-- Footer -->
   <footer class="w3-content w3-padding-64 w3-text-grey w3-xlarge">
     <i class="fa fa-facebook-official w3-hover-opacity"></i>
     <i class="fa fa-instagram w3-hover-opacity"></i>
@@ -238,9 +332,11 @@ body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
     <p class="w3-medium">Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank" class="w3-hover-text-green">w3.css</a></p>
   <!-- End footer -->
   </footer>
-
 <!-- END PAGE CONTENT -->
 </div>
-
 </body>
 </html>
+<script>
+  var modal = document.getElementById("saveurl");
+  window.onclick = function(event) {if (event.target == modal) {modal.style.display = "none";}}
+</script>
