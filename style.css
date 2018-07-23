@@ -1,0 +1,70 @@
+body, h1,h2,h3,h4,h5,h6 {
+  font-family: "Montserrat", sans-serif
+}
+.w3-row-padding img {
+  margin-bottom: 12px
+}
+
+/* Set the width of the sidebar to 120px */
+.w3-sidebar {
+  width: 120px;background: #222;
+}
+
+/* Add a left margin to the "page content" that matches the width of the sidebar (120px) */
+#main {
+  margin-left: 120px
+}
+
+/* Remove margins from "page content" on small screens */
+@media only screen and (max-width: 600px) {
+  #main {
+    margin-left: 0
+  }
+}
+
+.w3-check {
+  top:0px;
+}
+
+.fa-sign-out {
+  -ms-transform: rotate(-90deg); /* IE 9 */
+  -webkit-transform: rotate(-90deg); /* Safari 3-8 */
+  transform: rotate(-90deg);
+}
+
+#myNavbar div a i {
+  display:block;
+}
+
+.savebutton, i.w3-tooltip>span {
+  z-index:999;
+}
+
+i.w3-tooltip > span {
+  position:absolute;
+  left:16px;
+  top:16px;
+  width:500px;
+}
+
+.fa-info-circle {
+  margin-left:4px;
+}
+
+i.fa-info-circle img {
+  max-width:200px;
+  height:auto;
+}
+
+#totalrow > * {
+  text-align:right;
+}
+
+#totalrow :first-child {
+  background-color:black;
+  color:white;
+}
+
+#feature {
+  max-width:400px;
+}
