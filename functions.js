@@ -1,3 +1,40 @@
+google.charts.load("current", {packages:["corechart"]});
+//google.charts.setOnLoadCallback(drawChart);
+function drawChart() {
+  var rawdata = [];
+  rawdata.push(["Category","Subtotal"]);
+  for (category in globCategoryTotals){rawdata.push([category,globCategoryTotals[category]]);}
+  var piedata = google.visualization.arrayToDataTable(rawdata);
+  var pieoptions = {
+    legend: 'none',
+    backgroundColor: 'black',
+    pieSliceBorderColor: 'black',
+    chartArea: {
+      left: 10,
+      top: 10,
+      width: 180,
+      height: 180,
+    },
+  };
+  var piechart = new google.visualization.PieChart(document.getElementById('piechart'));
+  piechart.draw(piedata, pieoptions);
+
+  var barrawdata = [];
+  barrawdata[0] = ["MyBuild"].concat(Object.keys(globCategoryTotals));
+  barrawdata[1] = [globTrailerName].concat(Object.values(globCategoryTotals));
+  for(row in barrawdata){
+    console.log(row + ": " + barrawdata[row]);
+  }
+  var bardata = google.visualization.arrayToDataTable(barrawdata);
+  var baroptions = {
+    legend: 'none',
+    isStacked: true,
+    hAxis: {format: 'currency'},
+    theme: 'maximized'
+  }
+  var barchart = new google.visualization.BarChart(document.getElementById('barchart'));
+  barchart.draw(bardata, baroptions);
+}
 Number.prototype.formatMoney = function(c, d, t){
     var n = this, 
     c = isNaN(c = Math.abs(c)) ? 2 : c, 
@@ -8,20 +45,32 @@ Number.prototype.formatMoney = function(c, d, t){
     j = (j = i.length) > 3 ? j % 3 : 0;
    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 };
+
+globCategoryTotals = {};
+globTrailerName = "";
+
 function update(){
   var inputs = document.getElementsByTagName('input'),sum = 0,builturl = '';
   builturl = '?'; //start building the save url
   basepriceval = document.getElementById('baseprice').value; //get the id of the trailer selected
   builturl += 'basemodel=' + basepriceval; //add the trailer to the url as a parameter
+  category_subtotals = {};
   for(var i=0; i<inputs.length; i++) { //loop through the options
     var ip = inputs[i]; //current input
+    current_category = ip.getAttribute("category");
+    if (!(current_category in category_subtotals)){category_subtotals[current_category] = 0;} //start summing the category
     if (ip.getAttribute("class") == "w3-check" && ip.checked) { //if it's a checkbox and it's checked
       sum += Number(ip.getAttribute("price")); //add the option's price to the sum
       builturl += "&" + ip.getAttribute("id"); //add the option to the url
+      category_subtotals[current_category] += Number(ip.getAttribute("price"));
     }
+  }
+  for(var category in category_subtotals){
+    document.getElementById("catsub" + category).innerHTML = category + " Subtotal: $" + category_subtotals[category];
   }
   savebuttons = document.getElementsByClassName("savebutton"); //get the dynamic tag in each save button
   if (basepriceval != '') { //if a base model has been selected (manually or via url)
+    globTrailerName = trailers[basepriceval].name;
     email_link_suffix = 
     "?subject=" + encodeURIComponent("Question about my ") + trailers[basepriceval].name + " build" //subject line
     + "&body="
@@ -62,6 +111,8 @@ function update(){
     table.appendChild(tr);
   }
   document.getElementById("total").innerHTML = "$" + sum.formatMoney(0); //add the total to the bottom line
+  globCategoryTotals = category_subtotals;
+  drawChart();
 }
 function getURLParams(){
   var parenturl=parent.document.location.search; //get the parent page URL parameters
@@ -85,13 +136,15 @@ function initialize(){
   for (var j = 0; j < Object.keys(options).length; j++) {
     key = Object.keys(options)[j];
     if (options[key].label == "Category"){
+      var current_category = options[key].title;
       var category_header = document.createElement("h3");
       category_header.innerHTML = options[key].title;
-      var td = document.createElement("td");
-      td.appendChild(category_header);
-      td.setAttribute("colspan","3");
+      category_header.id = "catsub" + options[key].title;
+      var td1 = document.createElement("td");
+      td1.appendChild(category_header);
+      td1.setAttribute("colspan","3");
       var tr = document.createElement("tr");
-      tr.appendChild(td);
+      tr.appendChild(td1);
       table.appendChild(tr);
     } else {
       var description_div = document.createElement("div");//create description div
@@ -112,6 +165,7 @@ function initialize(){
       tr.appendChild(cell1);
       var checkbox = document.createElement("input");
       checkbox.id=key;
+      checkbox.setAttribute("category",current_category);
       checkbox.onchange=function(){update();};
       checkbox.classList.add("w3-check");
       checkbox.type = "checkbox";

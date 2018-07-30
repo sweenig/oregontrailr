@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="style.css">
   <script src="catalog.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script src="functions.js"></script>
 </head>
 <body class="w3-black" onload="initialize();">
@@ -41,7 +42,12 @@
   <div class="w3-padding-32 w3-content" id="build">
     <h2 class="w3-text-light-grey">Build<span class="w3-hide-small"> Your Trailer</span></h2>
     <hr style="width:200px" class="w3-opacity">
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSebnw7jfCzKQzIo8ZuF5-NmY_FMf01sFzl5oOdUFzS2dGucTw/viewform" class="savebutton w3-button w3-gray w3-padding" style="position:fixed;bottom:0;right:0;" target="_blank"><i class="fa fa-sign-out w3-margin-right"></i> Request a quote</a>
+    <button class="w3-button w3-gray w3-padding w3-margin-top" onclick="this.nextElementSibling.classList.toggle('w3-hide');drawChart();">Show breakdown</button>
+    <div class="w3-hide" id="piechart" style="width:200px; height: 200px;"></div>
+    <div style="position:fixed;bottom:0;right:0;z-index:999;">
+      <div id="barchart" style="width:100%; height: 50px;"></div>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSebnw7jfCzKQzIo8ZuF5-NmY_FMf01sFzl5oOdUFzS2dGucTw/viewform" class="savebutton w3-button w3-gray w3-padding" target="_blank"><i class="fa fa-sign-out w3-margin-right"></i> Request a quote</a>
+    </div>
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSebnw7jfCzKQzIo8ZuF5-NmY_FMf01sFzl5oOdUFzS2dGucTw/viewform" class="savebutton w3-button w3-gray w3-padding w3-margin-top" target="_blank"><i class="fa fa-sign-out w3-margin-right"></i> Request a quote</a>
     <table class="w3-table-all w3-text-black w3-hoverable w3-margin-top" id="buildtable">
       <tr><th></th><th></th><th style="text-align:right;">Price</th></tr>
@@ -54,7 +60,7 @@
       </tr>
       <tr>
         <td colspan="2">
-          <div style="text-align:center;"><img id="feature" src="image1.jpg" class="w3-image w3-margin-bottom" style="width:100%;height:auto;" /></div>
+          <div style="text-align:center;"><img id="feature" src="" class="w3-image w3-margin-bottom" style="width:100%;height:auto;" /></div>
           <div id="basedesc" class="w3-container"></div>
         </td>
         <td style="text-align:right;" id="baseecho"></td>
