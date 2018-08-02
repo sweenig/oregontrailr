@@ -1,11 +1,36 @@
 google.charts.load("current", {packages:["corechart"]});
+function nFormatter(n){
+  var exp = n.toExponential(1);
+  f1 = exp.substring(0,3);
+  f2 = exp.substring(exp.length - 1);
+  if (f2 == 4 ){
+    f = "$" + f1*10 + 'k';
+  } else if (f2 == 3){
+    f = "$" + f1 + 'k';
+  } else {
+    f = "$" + (Math.round(n/100)*100).toString();
+  }
+  return f;
+}
 function drawChart() {
   var rawdata = [];
   rawdata.push(["Category","Subtotal"]);
-  for (category in globCategoryTotals){rawdata.push([category,globCategoryTotals[category]]);}
+  grandtotal = 0;
+  for (category in globCategoryTotals){
+    rawdata.push([category,globCategoryTotals[category]]);
+    grandtotal += globCategoryTotals[category];
+  }
+  barindices = [0,1,2,3,4,5,6,7,8,9,10];
+  barticks = [];
+  for (var i=0; i < barindices.length; i++){
+    var j = {};
+    j["v"] = barindices[i] * grandtotal / 10;
+    j["f"] = nFormatter(j["v"]);
+    barticks.push(j);
+  }
+
   var piedata = google.visualization.arrayToDataTable(rawdata);
   var pieoptions = {
-    // legend: 'none',
     backgroundColor: 'black',
     pieSliceBorderColor: 'black',
     // pieSliceText: 'label',
@@ -15,21 +40,36 @@ function drawChart() {
       width: 380,
       height: 180,
     },
+    legend: {textStyle: {
+        color: '#FFF',
+        fontSize: 20,
+        bold: true,
+    },},
+    pieSliceTextStyle: {
+      color: 'white',
+      fontSize: 20,
+      bold: true,
+    },
+    tooltip: {textStyle: {
+        fontSize: 20,
+        bold: true,
+    },},
   };
   var piechart = new google.visualization.PieChart(document.getElementById('piechart'));
   piechart.draw(piedata, pieoptions);
+
   var barrawdata = [];
   barrawdata[0] = ["MyBuild"].concat(Object.keys(globCategoryTotals));
   barrawdata[1] = [globTrailerName].concat(Object.values(globCategoryTotals));
   var bardata = google.visualization.arrayToDataTable(barrawdata);
   var baroptions = {
-    legend: 'none',
     isStacked: true,
     hAxis: {
       format: 'currency',
+      ticks: barticks,
     },
-//    reverseCategories: true,
-    theme: 'maximized'
+    bar: {groupWidth: '100%',},
+    theme: 'maximized',
   };
   var barchart = new google.visualization.BarChart(document.getElementById('barchart'));
   barchart.draw(bardata, baroptions);
@@ -49,7 +89,8 @@ globCategoryTotals = {};
 globTrailerName = "";
 
 function update(){
-  var inputs = document.getElementsByTagName('input'),sum = 0,builturl = '';
+  var inputs = document.getElementById('buildtable').getElementsByTagName('input');
+  var sum = 0,builturl = '';
   builturl = '?'; //start building the save url
   basepriceval = document.getElementById('baseprice').value; //get the id of the trailer selected
   builturl += 'basemodel=' + basepriceval; //add the trailer to the url as a parameter
@@ -81,23 +122,35 @@ function update(){
     document.getElementById("mailjon").href += email_link_suffix; //append the email body to the email links
     document.getElementById("mailsaw").href += email_link_suffix; //append the email body to the email links
     sum += Number(trailers[basepriceval].price); //add the price of the trailer to the running total
+    document.getElementById("baserow").classList.remove("w3-hide");
     document.getElementById("baseecho").innerHTML = "$" + trailers[basepriceval].price; //put the trailer price on the trailer line
     document.getElementById("basedesc").innerHTML = trailers[basepriceval].description; //put the trailer description on the trailer line
     document.getElementById("feature").src = trailers[basepriceval].img; //change the image to the currently selected trailer
     globCategoryTotals = {"Base": trailers[basepriceval].price};
     for(var i=0; i<savebuttons.length;i++){ //loop through the save buttons' dynamic tags
-      savebuttons[i].innerHTML = "<i class='fa fa-sign-out w3-margin-right'></i> Request a quote for this " + trailers[basepriceval].name + " (est. $" + sum.formatMoney(0) + ")";
+      savebuttons[i].innerHTML = "<i class='fa fa-sign-out w3-margin-right'></i> Get a quote for your " + trailers[basepriceval].name
+      if(sum > 0){savebuttons[i].innerHTML += " (est. $" + sum.formatMoney(0) + ")";}
       savebuttons[i].href = "https://docs.google.com/forms/d/e/1FAIpQLSebnw7jfCzKQzIo8ZuF5-NmY_FMf01sFzl5oOdUFzS2dGucTw/viewform?entry.648048562=" + encodeURIComponent(builturl);
     }
-    sharebutton.innerHTML = "<i class='fa fa-share-square-o w3-margin-right'></i> Share this " + trailers[basepriceval].name;
+    sharebutton.innerHTML = "<i class='fa fa-share-square-o w3-margin-right'></i> Share your " + trailers[basepriceval].name;
   } else {
     for(var i=0; i<savebuttons.length;i++) {
-      savebuttons[i].innerHTML = "<i class='fa fa-sign-out w3-margin-right'></i> Request a quote (est. $" + sum.formatMoney(0) + ")";
+      savebuttons[i].innerHTML = "<i class='fa fa-sign-out w3-margin-right'></i> Get a quote";
+      if(sum > 0){savebuttons[i].innerHTML += " (est. $" + sum.formatMoney(0) + ")";}
       savebuttons[i].href = "https://docs.google.com/forms/d/e/1FAIpQLSebnw7jfCzKQzIo8ZuF5-NmY_FMf01sFzl5oOdUFzS2dGucTw/viewform?entry.648048562=" + encodeURIComponent(builturl);
     }
   }
-  console.log(encodeURIComponent("Build url: " + location.pathname + builturl));
+  // console.log("Build url: " + location.pathname + builturl);
+  document.getElementById('sharemodalurl').href = location.pathname + builturl;
+  document.getElementById('sharemodalurl').innerHTML = location.pathname + builturl;
   sharebutton.href = location.pathname + builturl;
+  if (sum > 0){
+    document.getElementById("showbreakdownbutton").disabled = false;
+    sharebutton.disabled = false;
+  } else {
+    document.getElementById("showbreakdownbutton").disabled = true;
+    sharebutton.disabled = true;
+  }
   var table = document.getElementById("buildtable");
   if (document.getElementById('totalrow') == null){ //if the total row doesn't exist, create it
     var txt1 = document.createTextNode("Total:");
@@ -192,4 +245,12 @@ function initialize(){
   }
   update();
 }
-
+function togglepie(elem){
+  document.getElementById('piechart').classList.toggle('w3-hide');
+  drawChart();
+  if(elem.innerHTML.search("Show") > 0) {
+    elem.innerHTML = elem.innerHTML.replace("Show","Hide");
+  } else {
+    elem.innerHTML = elem.innerHTML.replace("Hide","Show");
+  }
+}

@@ -35,23 +35,44 @@
 <div class="w3-padding-large" id="main">
   <!-- Header/Home -->
   <header class="w3-container w3-padding-32 w3-center w3-black" id="home">
-    <h1 class="w3-jumbo">Oregon Trail'R<span class="w3-hide-small"> Teardrop trailers</span></h1>
-    <p>finest-quality, beautiful teardrop campers</p>
+    <h1 class="w3-jumbo">Oregon Trail'R<span class="w3-hide-small"> Teardrop Trailers</span></h1>
+    <h3 style="text-transform: uppercase">finest-quality, beautiful teardrop campers</h3>
   </header>
+  <content class="w3-padding-32 w3-content">
+    <div class="w3-row">
+      <img class="w3-image w3-half" src="trailers/frontear.feature.png" />
+      <div class="w3-half w3-padding">
+        <span style="font-weight:bold;">FronTear</span> is our Flagship model traditional teardrop camper. Beautiful classic styling looks great behind any tow vehicle. FronTear is lightweight and can easily be towed behind most cars. FronTear model teardrops start at $14000. They are fully configurable with many options available on an ala-carte basis. FronTear can be configured to suit your budget and needs.
+      </div>
+    </div>
+    <hr style="width:200px" class="w3-opacity">
+    <div class="w3-row">
+      <img class="w3-image w3-half" src="trailers/terradrop.feature.png" />
+      <div class="w3-half w3-padding">
+        <span style="font-weight:bold;">TerraDrop</span> is our edgy, tough, off-roading offering. Designed to compliment the styling cues of today's off road capable vehicles, TerraDrop can be configured to be VERY capable for rough terrain, and overland travel. TerraDrop Starts at $16,000. They are fully configurable with many options available on an ala-carte basis. TerraDrop can be configured to suit your budget and needs.
+      </div>
+    </div>
+    <hr style="width:200px" class="w3-opacity">
+    <div class="w3-row">
+      <img class="w3-image w3-half" src="trailers/dodrop.feature.png" />
+      <div class="w3-half w3-padding">
+        <span style="font-weight:bold;">Do-Drop</span> is small and simple, but totally ready for adventure! This sporty teardrop can be configured in either 3 1/2 ft wide or 4 ft wide versions. The 3 1/2 ft version is ideal to tow behind side-by-side utility vehicles, like Yamaha Rhinos and Arctic cat units. Do-Drop can be hauled out into the woods on narrow roads and trails. Ideal for sportsman / fishermen / adventure seekers. The 3 1/2 ft version is ideal for a single occupant, but could possibly work for two, given its' bed which is a little larger than twin size.  The 4 ft version is still small, but more suited to dual occupancy.<br /><br />DO-Drop pricing starts at $6150, and is configurable with a small number of highly effective upgrades/options.
+      </div>
+    </div>
+  </content>
   <!-- build Section -->
   <div class="w3-padding-32 w3-content" id="build">
     <h2 class="w3-text-light-grey">Build<span class="w3-hide-small"> Your Trailer</span></h2>
     <hr style="width:200px" class="w3-opacity">
-    <button class="w3-button w3-gray w3-padding w3-margin-top" onclick="this.nextElementSibling.classList.toggle('w3-hide');drawChart();"><i class="fa fa-pie-chart" aria-hidden="true"></i> Show breakdown</button>
     <div class="w3-hide" id="piechart" style="width:400px; height: 200px;margin-left:auto;margin-right:auto;"></div>
-    <div style="position:fixed;bottom:0;right:0;z-index:999;">
-      <div id="barchart" style="width:100%; height: 50px;"></div>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSebnw7jfCzKQzIo8ZuF5-NmY_FMf01sFzl5oOdUFzS2dGucTw/viewform" class="savebutton w3-button w3-gray w3-padding" target="_blank"><i class="fa fa-sign-out w3-margin-right"></i> Request a quote</a>
+    <div style="position:sticky;top:0;z-index:2;background-color:white!important;" class="w3-black w3-padding">
+      <button id="showbreakdownbutton" disabled class="w3-button w3-gray w3-padding w3-margin-top" onclick="togglepie(this);"><i class="fa fa-pie-chart" aria-hidden="true"></i> Show breakdown</button>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSebnw7jfCzKQzIo8ZuF5-NmY_FMf01sFzl5oOdUFzS2dGucTw/viewform" class="savebutton w3-button w3-gray w3-padding w3-margin-top" target="_blank"><i class="fa fa-sign-out w3-margin-right"></i> Get a quote</a>
+      <button id="sharebutton" disabled class="w3-button w3-gray w3-padding w3-margin-top" onclick="document.getElementById('sharemodal').style.display = 'block';"><i class="fa fa-share-square-o w3-margin-right"></i> Share your build</button>
+      <div id="barchart" style="width:100%;height:50px;" class="w3-margin-top w3-margin-bottom"></div>
     </div>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSebnw7jfCzKQzIo8ZuF5-NmY_FMf01sFzl5oOdUFzS2dGucTw/viewform" class="savebutton w3-button w3-gray w3-padding w3-margin-top" target="_blank"><i class="fa fa-sign-out w3-margin-right"></i> Request a quote</a>
-    <a id="sharebutton" target="_self" class="w3-button w3-gray w3-padding w3-margin-top" target="_blank"><i class="fa fa-share-square-o w3-margin-right"></i> Share this build</a>
-    <table class="w3-table-all w3-text-black w3-hoverable w3-margin-top" id="buildtable">
-      <tr><th></th><th></th><th style="text-align:right;">Price</th></tr>
+    <table class="w3-table-all w3-text-black" id="buildtable">
+      <tr><th><h3>Base Trailer Model</h3></th><th></th><th style="text-align:right;"><h3>Price</h3></th></tr>
       <tr>
         <td colspan="3">
           <select onchange="update();" class="w3-select w3-margin-top w3-margin-bottom" id="baseprice">
@@ -59,7 +80,7 @@
           </select>
         </td>
       </tr>
-      <tr>
+      <tr id="baserow" class="w3-hide">
         <td colspan="2">
           <div style="text-align:center;"><img id="feature" src="" class="w3-image w3-margin-bottom" style="width:100%;height:auto;" /></div>
           <div id="basedesc" class="w3-container"></div>
@@ -67,7 +88,6 @@
         <td style="text-align:right;" id="baseecho"></td>
       </tr>
     </table>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSebnw7jfCzKQzIo8ZuF5-NmY_FMf01sFzl5oOdUFzS2dGucTw/viewform" class="savebutton w3-button w3-gray w3-padding w3-margin-top w3-margin-bottom" target="_blank"><i class="fa fa-sign-out w3-margin-right"></i> Request a quote</a>
   </div>
   <!-- End build Section -->
   <!-- Portfolio Section -->
@@ -119,6 +139,20 @@
   <!-- End footer -->
   </footer>
 <!-- END PAGE CONTENT -->
+</div>
+<div id="sharemodal" class="w3-modal" >
+  <div class="w3-modal-content w3-animate-opacity w3-card-4">
+    <header class="w3-container w3-green">
+      <span onclick="document.getElementById('sharemodal').style.display='none'" class="w3-button w3-display-topright w3-xlarge"><i class="fa fa-times" aria-hidden="true"></i></span>
+      <p>Use this URL to resume your build at any time.</p>
+    </header>
+    <div class="w3-container w3-padding">
+      <a id="sharemodalurl" class="w3-text-black"></a>
+    </div>
+    <footer class="w3-container w3-green">
+      <p>Share this URL with anyone so they can see your build in progress</p>
+    </footer>
+  </div>
 </div>
 </body>
 </html>
