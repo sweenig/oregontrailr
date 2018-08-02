@@ -118,4 +118,23 @@ options = {
     description: "description needed",
     price: 479,
   },
+  category3: {
+    label: "Category",
+    title: "Interior",
+  },
+  opt14: {
+    label: "Spare tire",
+    description: "small doughnut style wheel and tire mounted below chassis",
+    price: 149,
+  },
+  opt15: {
+    label: "Back-up lights",
+    description: "High power LED flood light mounted under chassis",
+    price: 129,
+  },
+  opt16: {
+    label: "Electric Braking Option",
+    description: "description needed",
+    price: 479,
+  },
 }

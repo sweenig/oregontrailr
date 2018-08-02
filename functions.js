@@ -1,37 +1,36 @@
 google.charts.load("current", {packages:["corechart"]});
-//google.charts.setOnLoadCallback(drawChart);
 function drawChart() {
   var rawdata = [];
   rawdata.push(["Category","Subtotal"]);
   for (category in globCategoryTotals){rawdata.push([category,globCategoryTotals[category]]);}
   var piedata = google.visualization.arrayToDataTable(rawdata);
   var pieoptions = {
-    legend: 'none',
+    // legend: 'none',
     backgroundColor: 'black',
     pieSliceBorderColor: 'black',
+    // pieSliceText: 'label',
     chartArea: {
       left: 10,
       top: 10,
-      width: 180,
+      width: 380,
       height: 180,
     },
   };
   var piechart = new google.visualization.PieChart(document.getElementById('piechart'));
   piechart.draw(piedata, pieoptions);
-
   var barrawdata = [];
   barrawdata[0] = ["MyBuild"].concat(Object.keys(globCategoryTotals));
   barrawdata[1] = [globTrailerName].concat(Object.values(globCategoryTotals));
-  for(row in barrawdata){
-    console.log(row + ": " + barrawdata[row]);
-  }
   var bardata = google.visualization.arrayToDataTable(barrawdata);
   var baroptions = {
     legend: 'none',
     isStacked: true,
-    hAxis: {format: 'currency'},
+    hAxis: {
+      format: 'currency',
+    },
+//    reverseCategories: true,
     theme: 'maximized'
-  }
+  };
   var barchart = new google.visualization.BarChart(document.getElementById('barchart'));
   barchart.draw(bardata, baroptions);
 }
@@ -69,6 +68,7 @@ function update(){
     document.getElementById("catsub" + category).innerHTML = category + " Subtotal: $" + category_subtotals[category];
   }
   savebuttons = document.getElementsByClassName("savebutton"); //get the dynamic tag in each save button
+  sharebutton = document.getElementById("sharebutton");
   if (basepriceval != '') { //if a base model has been selected (manually or via url)
     globTrailerName = trailers[basepriceval].name;
     email_link_suffix = 
@@ -84,16 +84,20 @@ function update(){
     document.getElementById("baseecho").innerHTML = "$" + trailers[basepriceval].price; //put the trailer price on the trailer line
     document.getElementById("basedesc").innerHTML = trailers[basepriceval].description; //put the trailer description on the trailer line
     document.getElementById("feature").src = trailers[basepriceval].img; //change the image to the currently selected trailer
+    globCategoryTotals = {"Base": trailers[basepriceval].price};
     for(var i=0; i<savebuttons.length;i++){ //loop through the save buttons' dynamic tags
       savebuttons[i].innerHTML = "<i class='fa fa-sign-out w3-margin-right'></i> Request a quote for this " + trailers[basepriceval].name + " (est. $" + sum.formatMoney(0) + ")";
       savebuttons[i].href = "https://docs.google.com/forms/d/e/1FAIpQLSebnw7jfCzKQzIo8ZuF5-NmY_FMf01sFzl5oOdUFzS2dGucTw/viewform?entry.648048562=" + encodeURIComponent(builturl);
     }
+    sharebutton.innerHTML = "<i class='fa fa-share-square-o w3-margin-right'></i> Share this " + trailers[basepriceval].name;
   } else {
     for(var i=0; i<savebuttons.length;i++) {
       savebuttons[i].innerHTML = "<i class='fa fa-sign-out w3-margin-right'></i> Request a quote (est. $" + sum.formatMoney(0) + ")";
       savebuttons[i].href = "https://docs.google.com/forms/d/e/1FAIpQLSebnw7jfCzKQzIo8ZuF5-NmY_FMf01sFzl5oOdUFzS2dGucTw/viewform?entry.648048562=" + encodeURIComponent(builturl);
     }
   }
+  console.log(encodeURIComponent("Build url: " + location.pathname + builturl));
+  sharebutton.href = location.pathname + builturl;
   var table = document.getElementById("buildtable");
   if (document.getElementById('totalrow') == null){ //if the total row doesn't exist, create it
     var txt1 = document.createTextNode("Total:");
@@ -111,7 +115,7 @@ function update(){
     table.appendChild(tr);
   }
   document.getElementById("total").innerHTML = "$" + sum.formatMoney(0); //add the total to the bottom line
-  globCategoryTotals = category_subtotals;
+  globCategoryTotals = Object.assign({}, globCategoryTotals, category_subtotals);
   drawChart();
 }
 function getURLParams(){
